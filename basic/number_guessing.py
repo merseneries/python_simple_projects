@@ -1,18 +1,9 @@
 import random
 import os
+from _local_package import get_input
 
 COUNT_TRY = 5
 line = "-" * 25
-
-
-def get_input(text):
-    while True:
-        try:
-            tmp = int(input(text))
-            break
-        except ValueError:
-            print("It must be digit.")
-    return tmp
 
 
 def main():
