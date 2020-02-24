@@ -1,16 +1,16 @@
 import random
 import os
-from _local_package import get_input
+from _local_package import get_digit_input
 
 COUNT_TRY = 5
 line = "-" * 25
 
 
 def main():
-    range_input = get_input("Choose digit for range. Starting from 0 to ")
+    range_input = get_digit_input("Choose digit for range. Starting from 0 to ")
     secret_dig = random.randint(0, int(range_input))
     for i in range(COUNT_TRY, -1, -1):
-        dig_input = get_input("What digit I have in mind?\n")
+        dig_input = get_digit_input("What digit I have in mind?\n")
 
         if dig_input == secret_dig:
             print("Congratulation you won.", "\n" + line)

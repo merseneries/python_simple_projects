@@ -1,5 +1,5 @@
 import os
-from _local_package import get_input
+from _local_package import get_digit_input
 
 
 def get_random():
@@ -9,7 +9,7 @@ def get_random():
 
 def main():
     while True:
-        num_dice = get_input("Number of dice: ")
+        num_dice = get_digit_input("Number of dice: ")
         if num_dice > 0:
             break
         print("Number of dice must be > 0")

@@ -1,4 +1,4 @@
-def get_input(text):
+def get_digit_input(text):
     while True:
         try:
             tmp = int(input(text))
