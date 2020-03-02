@@ -23,7 +23,7 @@ def binary_search(array, element, high, low=0):
 if __name__ == "__main__":
     search_elem = 66
     list_int = [random.randint(-100, 100) for i in range(50)]
-    for i, v in enumerate(list_int, 1):
+    for i, v in enumerate(bubble_sort(list_int), 1):
         print(f"{v:4}", sep="  ", end="")
         if i % 10 == 0:
             print()
