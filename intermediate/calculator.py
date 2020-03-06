@@ -40,7 +40,6 @@ class Calculator:
 
     def binding(self):
         except_list = ["C", "X", "+/-", "="]
-
         for name_row, text_row in zip(self.name_elements, self.text_elements):
             for name, text in zip(name_row, text_row):
                 if text in except_list:
@@ -88,7 +87,7 @@ class Calculator:
             :return: digit
             """
             operators = {
-                "/": operator.floordiv,
+                "/": operator.truediv,
                 "x": operator.mul,
                 "+": operator.add,
                 "-": operator.sub,
@@ -110,10 +109,8 @@ class Calculator:
                     continue
                 if i[0] == ")" and counter == 0:
                     right_index = i[1]
-                    return calculation(
-                        input_list[:left_index - 1] + [calculation(input_list[left_index:right_index])] + input_list[
-                                                                                                          (
-                                                                                                                      right_index + 1):])
+                    return calculation(input_list[:left_index - 1] + [calculation(input_list[left_index:right_index])]
+                                       + input_list[(right_index + 1):])
                 counter -= 1
             else:
                 left_index, right_index = get_indexes(operators_index, ["/", "x", "+" or "-"])
@@ -123,23 +120,10 @@ class Calculator:
 
         text = self.text_box.get(1.0, "end-1c")
         separated_list = list(filter(None, re.split(r"([()+\-x/])", text)))
-        math_list = [int(i) if i.isdigit() else i for i in separated_list]
+        math_list = [float(i) if i.isdigit() or "." in i else i for i in separated_list]
         result = calculation(math_list)
         self.clear()
         self.send_character_to_text_box(result)
-
-    def addition(self):
-        pass
-
-    def substraction(self):
-        pass
-
-    def multiplication(self):
-        pass
-
-    def division(self):
-        pass
-
 
 root = Tk()
 cal = Calculator(root)
