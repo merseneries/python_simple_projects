@@ -27,26 +27,27 @@ def write_file(path, data, mode="a"):
         file.writelines(data)
 
 
-def add_site(ip_list):
+def add_ip(ip_list, path=HOST_PATH):
     """
-        Add site or list of sites to the end of file.
+        Add IP or list of IPs to the end of file.
 
     """
     ip_list = [ip_list] if type(ip_list) == str else ip_list
     all_valid = all([check_ip(ip) for ip in ip_list])
     if all_valid:
-        for i, v in enumerate(ips_list):
-            ips_list[i] = v + "\n"
-        write_file(HOST_PATH, ip_list)
+        for i, v in enumerate(ip_list):
+            ip_list[i] = v + "\n"
+        write_file(path, ip_list)
 
 
-def remove_site(ip_list):
+def remove_ip(ip_list, path=HOST_PATH):
     """
-        Remove site or list of sites from file by ip
+        Remove IP or list of IPs from file
     """
     include = True
     new_data = []
-    file_data = read_file(HOST_PATH)
+    file_data = read_file(path)
+    ip_list = [ip_list] if type(ip_list) == str else ip_list
 
     # Find shorter way to skip row
     for row in file_data:
@@ -56,7 +57,7 @@ def remove_site(ip_list):
                 break
         if include:
             new_data.append(row)
-    write_file(HOST_PATH, new_data, "w")
+    write_file(path, new_data, "w")
 
 
 def check_ip(ip):
@@ -71,4 +72,4 @@ def check_ip(ip):
 
 if __name__ == '__main__':
     ips_list = ["134.234.123.33", "21.44.55.88", "255.196.44.100", "234.22.184.24 master.com"]
-    add_site(ips_list)
+    add_ip(ips_list)
