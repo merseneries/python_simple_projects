@@ -8,25 +8,25 @@ class YouTubeDownloader:
     """Class that download video from YouTube with given url.
     It downloads video and audio separately and than concatenate
     with help of ffmpeg programs. ffmpeg.exe must be in same directory
-    than script.
+    that script.
     """
     CURRENT_PATH = os.getcwd()
     FFMPEG_PATH = CURRENT_PATH + os.sep + "ffmpeg.exe"
     TITLE = ""
 
-    def __init__(self, url: str):
-        self.url = url
-        self.yt = YouTube(url)
+    def __init__(self, url):
+        self._url = url
+        self._yt = YouTube(url)
         self.files_path = []
 
     def get_all_streams(self):
-        return self.yt.streams.filter().all()
+        return self._yt.streams.filter().all()
 
     def get_audio(self):
-        return self.yt.streams.filter(only_audio=True)
+        return self._yt.streams.filter(only_audio=True)
 
     def get_video_adaptive(self):
-        return self.yt.streams.filter(only_video=True, adaptive=True)
+        return self._yt.streams.filter(only_video=True, adaptive=True)
 
     def get_itag_video(self, res, mime_type, fps):
         """Return number of stream
@@ -45,7 +45,7 @@ class YouTubeDownloader:
         for row in video_list:
             match = re.search(pattern, str(row))
             if match:
-                return int(re.search("\d+", str(row)).group())
+                return int(re.search(r"\d+", str(row)).group())
         return None
 
     def get_stream(self, resolution="1080p", video_type="mp4", fps="30fps", audio_type="webm"):
@@ -56,10 +56,10 @@ class YouTubeDownloader:
 
     def save(self, stream_list):
         if len(stream_list) > 0:
-            self.TITLE = stream_list[0].title
+            self.TITLE = re.sub(r"[\\/<>?*\":|]", "", stream_list[0].title)
             for s in stream_list:
                 s.download(self.CURRENT_PATH)
-                self.files_path.append(self.CURRENT_PATH + os.sep + s.title + "." + s.mime_type.split("/")[-1])
+                self.files_path.append(self.CURRENT_PATH + os.sep + self.TITLE + "." + s.mime_type.split("/")[-1])
 
     def concat_files(self):
         input_ffmpeg = []
@@ -94,5 +94,5 @@ class YouTubeDownloader:
 
 
 if __name__ == '__main__':
-    you_dow = YouTubeDownloader("https://www.youtube.com/watch?v=jLMBLuGJTsA")
+    you_dow = YouTubeDownloader("https://www.youtube.com/watch?v=VxrcCxqIOeg")
     you_dow.download()
