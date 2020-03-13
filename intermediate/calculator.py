@@ -44,14 +44,28 @@ class Calculator:
             for name, text in zip(name_row, text_row):
                 if text in except_list:
                     continue
-                send_partial = partial(self.send_character_to_text_box, text)
-                self.elements["button_" + name]["command"] = send_partial
+                # send_partial = partial(self.set_character_to_text_box, text)
+                # self.elements["button_" + name]["command"] = send_partial
+                self.elements["button_" + name]["command"] = lambda value=text: self.set_character_to_text_box(value)
 
         self.elements["button_clear"]["command"] = self.clear
         self.elements["button_delete"]["command"] = self.delete
         self.elements["button_equal"]["command"] = self.equal
+        self.elements["button_dot"]["command"] = self.dot
+        self.text_box.bind("<Key>", self.callback_text_box)
 
-    def send_character_to_text_box(self, char):
+    @staticmethod
+    def callback_text_box(event):
+        match_obj = re.search(r"[0-9()+\-/*\.]", event.char)
+        if match_obj:
+            print(event)
+        else:
+            return "break"
+
+    def get_character_from_text_box(self, start=1.0, end="end-1c"):
+        return self.text_box.get(start, end)
+
+    def set_character_to_text_box(self, char):
         self.text_box.insert("end", char)
         self.text_box.tag_add("input_field", 1.0, "1.end")
         self.text_box.tag_config("input_field", font=("Verdana", 20, "bold"), justify=RIGHT)
@@ -123,9 +137,19 @@ class Calculator:
         math_list = [float(i) if i.isdigit() or "." in i else i for i in separated_list]
         result = calculation(math_list)
         self.clear()
-        self.send_character_to_text_box(result)
+        self.set_character_to_text_box(result)
+
+    def dot(self):
+        value = self.get_character_from_text_box()
+        if len(value) == 0:
+            value = "0."
+        else:
+            value = "" if "." in value else "."
+        self.set_character_to_text_box(value)
+
 
 root = Tk()
 cal = Calculator(root)
 root.geometry("203x245")
+root.title("Calculator")
 root.mainloop()
